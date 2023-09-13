@@ -1,0 +1,14 @@
+Root Key creation 
+openssl genrsa  -out rootCA.key 4096
+
+Root CA Cert 
+openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -out rootCA.crt
+
+Cert private key creation 
+openssl genrsa -out mydomain.com.key 2048
+
+CSR Creation 
+openssl req -new -key mydomain.com.key -out mydomain.com.csr
+
+Cert creation 
+openssl x509 -req -in mydomain.com.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out mydomain.com.crt -days 500 -sha256
