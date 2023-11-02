@@ -12,3 +12,28 @@ openssl req -new -key mydomain.com.key -out mydomain.com.csr
 
 Cert creation 
 openssl x509 -req -in mydomain.com.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out mydomain.com.crt -days 500 
+
+
+
+
+-----
+working 
+
+Root Key creation 
+ openssl genrsa -out rootCA.key 4096  
+
+Root CA CERT
+openssl req -x509 -new -key rootCA.key -sha256 -days 1024 -out rootCA.crt -subj "/C=IN/ST=Maharashtra/L=Mumbai/O=Better World Technology Pvt.Ltd/OU=Infra/CN=npci-connector.mum1-pp.zetaapps.in" -config <(echo -e "[req]\ndistinguished_name=req_distinguished_name\n[req_distinguished_name]\n[v3_req]\nextensions=v3_req\n[v3_req]\nsubjectAltName=DNS:npci-connector.mum1-pp.zetaapps.in")
+
+
+PRivate Key 
+ openssl genrsa -out mydomain.com.key 2048  
+
+Cert CSR : 
+openssl req -new -key mydomain.com.key -out mydomain.com.csr -subj "/C=US/ST=State/L=City/O=YourOrg/OU=YourUnit/CN=mydomain.com" -config <(echo -e "[req]\ndistinguished_name=req_distinguished_name\n[req_distinguished_name]\n[v3_req]\nextensions=v3_req\n[v3_req]\nsubjectAltName=DNS:mydomain.com,DNS:www.mydomain.com")
+
+
+Cert Certion : 
+
+ openssl x509 -req -in mydomain.com.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out mydomain.com.crt -days 500 -extfile <(echo -e "subjectAltName=DNS:mydomain.com,DNS:www.mydomain.com")
+
